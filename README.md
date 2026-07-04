@@ -14,7 +14,7 @@ Disciplina: Práticas Extensionistas III
 ## Documentação Consolidada
 - [Relatório Final (PDF)](./docs/misc/Victor%20e%20Bianca%20-%20Praticas%203.pdf)
 
-## Infraestrutura e Deploy
+### Infraestrutura e Deploy
 
 O sistema está hospedado em nuvem e pode ser acessado em: **[vpb-praticas.vercel.app](https://vpb-praticas.vercel.app/)**
 
@@ -26,6 +26,10 @@ Serviços utilizados:
 
 **Observação:** O serviço de back-end utiliza o plano gratuito do Render, que hiberna automaticamente após um período de inatividade. Na primeira requisição após a hibernação, a API pode levar até 1 minuto para responder enquanto o serviço é reiniciado. Requisições subsequentes funcionam normalmente.
 
+### Ferramentas de IA
+- Claude
+- Github Copilot
+- Lovable
 
 ### Definição
 
@@ -33,7 +37,6 @@ Serviços utilizados:
 - Back-end: [Python](https://www.python.org/)
 - Front-End: [React](https://react.dev/)
 - SGDB: [PostgreSQL](https://www.postgresql.org/)
-- Containerização: [Docker](https://www.docker.com/)
 
 ### Documento de Requisitos de Software
 - [requisitos.md](./docs/REQUISITOS.md)  
@@ -45,8 +48,14 @@ Serviços utilizados:
 - [BRModelo (.brM3)](./docs/er_conceitual/ER_Conceitual.brM3)
 
 ### Modelo ER Lógico
+#### Atualizado
+- [PNG](./docs/er_logico/ER_Logico%20-%20Atualizado.png)
+
+#### Antigo
 - [PNG](./docs/er_logico/ER_Logico.png)
 - [BRModelo (.brM3)](./docs/er_logico/ER_Logico.brM3)
+
+
 
 ### Diagrama de Classes
 - [PNG](./docs/diagrama_classes/diagrama_classes.png)
