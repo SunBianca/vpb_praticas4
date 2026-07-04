@@ -25,7 +25,6 @@ import {
 import { getSession, clearSession, type LoginResponse } from "@/lib/users";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
