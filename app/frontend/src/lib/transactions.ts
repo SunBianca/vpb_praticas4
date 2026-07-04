@@ -44,9 +44,7 @@ const serialize = (data: Partial<TransactionInput>) => ({
   ...data,
   amount: data.amount !== undefined ? String(data.amount) : undefined,
   schedule_id:
-    data.schedule_id === undefined || data.schedule_id === null
-      ? null
-      : Number(data.schedule_id),
+    data.schedule_id === undefined || data.schedule_id === null ? null : Number(data.schedule_id),
 });
 
 export const createTransaction = (data: TransactionInput) =>

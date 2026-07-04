@@ -58,12 +58,8 @@ export const updateSchedule = (id: number, data: Partial<ScheduleInput>) =>
 export const deleteSchedule = (id: number) =>
   apiFetch<void>(`/schedules/${id}`, { method: "DELETE" });
 
-export const paySchedule = (
-  scheduleId: number,
-  data: { amount: number; payment_date: string },
-) =>
+export const paySchedule = (scheduleId: number, data: { amount: number; payment_date: string }) =>
   apiFetch(`/schedules/${scheduleId}/payments`, {
     method: "POST",
     body: JSON.stringify({ amount: String(data.amount), payment_date: data.payment_date }),
   });
-

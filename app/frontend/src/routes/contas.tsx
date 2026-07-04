@@ -10,22 +10,44 @@ import { getSession } from "@/lib/users";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  accountsQueryOptions, createAccount, deleteAccount,
-  accountSchema, type AccountInput,
+  accountsQueryOptions,
+  createAccount,
+  deleteAccount,
+  accountSchema,
+  type AccountInput,
 } from "@/lib/accounts";
 import { formatBRL } from "@/lib/mockDashboard";
 
@@ -48,15 +70,17 @@ function AccountsPage() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const session = mounted ? getSession() : null;
-  const accounts = session?.id
-    ? allAccounts.filter((a) => a.user_id === session.id)
-    : [];
+  const accounts = session?.id ? allAccounts.filter((a) => a.user_id === session.id) : [];
 
   const form = useForm<AccountInput>({
     resolver: zodResolver(accountSchema),
     defaultValues: {
-      user_id: session?.id ?? 1, bank: "", branch: "", account_number: "",
-      account_type: "corrente", balance: 0,
+      user_id: session?.id ?? 1,
+      bank: "",
+      branch: "",
+      account_number: "",
+      account_type: "corrente",
+      balance: 0,
     },
   });
 
@@ -104,60 +128,97 @@ function AccountsPage() {
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
-            <DialogHeader><DialogTitle>Nova conta bancária</DialogTitle></DialogHeader>
+            <DialogHeader>
+              <DialogTitle>Nova conta bancária</DialogTitle>
+            </DialogHeader>
             <Form {...form}>
               <form onSubmit={form.handleSubmit((v) => createM.mutate(v))} className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <FormField control={form.control} name="bank" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Banco</FormLabel>
-                      <FormControl><Input placeholder="Banco do Brasil" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                  <FormField control={form.control} name="branch" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Filial</FormLabel>
-                      <FormControl><Input placeholder="0001" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                  <FormField control={form.control} name="account_number" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Número da Conta</FormLabel>
-                      <FormControl><Input placeholder="12345-6" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                  <FormField control={form.control} name="account_type" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tipo de Conta</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
-                        <SelectContent>
-                          <SelectItem value="corrente">Corrente</SelectItem>
-                          <SelectItem value="poupanca">Poupança</SelectItem>
-                          <SelectItem value="salario">Salário</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                  <FormField control={form.control} name="balance" render={({ field }) => (
-                    <FormItem className="sm:col-span-2">
-                      <FormLabel>Saldo da Conta (R$)</FormLabel>
-                      <FormControl><Input type="number" step="0.01" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
+                  <FormField
+                    control={form.control}
+                    name="bank"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Banco</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Banco do Brasil" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="branch"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Filial</FormLabel>
+                        <FormControl>
+                          <Input placeholder="0001" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="account_number"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Número da Conta</FormLabel>
+                        <FormControl>
+                          <Input placeholder="12345-6" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="account_type"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tipo de Conta</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="corrente">Corrente</SelectItem>
+                            <SelectItem value="poupanca">Poupança</SelectItem>
+                            <SelectItem value="salario">Salário</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="balance"
+                    render={({ field }) => (
+                      <FormItem className="sm:col-span-2">
+                        <FormLabel>Saldo da Conta (R$)</FormLabel>
+                        <FormControl>
+                          <Input type="number" step="0.01" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
-                <Button type="submit" disabled={createM.isPending} className="font-display uppercase tracking-wide">
+                <Button
+                  type="submit"
+                  disabled={createM.isPending}
+                  className="font-display uppercase tracking-wide"
+                >
                   {createM.isPending ? "Criando..." : "Criar"}
                 </Button>
               </form>
             </Form>
           </DialogContent>
-
         </Dialog>
       </header>
 
@@ -190,7 +251,9 @@ function AccountsPage() {
             <div className="mt-4 flex items-center justify-between">
               <div>
                 <div className="text-xs text-muted-foreground">Saldo</div>
-                <div className={`font-display text-2xl ${Number(a.balance) < 0 ? "text-destructive" : "text-[oklch(0.85_0.25_140)]"}`}>
+                <div
+                  className={`font-display text-2xl ${Number(a.balance) < 0 ? "text-destructive" : "text-[oklch(0.85_0.25_140)]"}`}
+                >
                   R$ {formatBRL(a.balance)}
                 </div>
               </div>

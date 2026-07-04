@@ -46,7 +46,10 @@ function RecuperarSenhaPage() {
     <div className="min-h-screen w-full bg-diamond-frame flex items-center justify-center p-6">
       <div className="relative w-full max-w-2xl overflow-hidden rounded-[2rem] bg-lavender bg-triangles-soft p-8 sm:p-12 shadow-2xl space-y-6">
         <div className="flex items-center justify-between">
-          <Link to="/login" className="text-sm text-lavender-foreground/80 underline-offset-2 hover:underline">
+          <Link
+            to="/login"
+            className="text-sm text-lavender-foreground/80 underline-offset-2 hover:underline"
+          >
             ← Voltar
           </Link>
         </div>
@@ -56,7 +59,10 @@ function RecuperarSenhaPage() {
 
         {!user ? (
           <form
-            onSubmit={(e) => { e.preventDefault(); lookup.mutate(email); }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              lookup.mutate(email);
+            }}
             className="space-y-5"
           >
             <Field
@@ -77,7 +83,10 @@ function RecuperarSenhaPage() {
           </form>
         ) : (
           <form
-            onSubmit={(e) => { e.preventDefault(); save.mutate(); }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              save.mutate();
+            }}
             className="space-y-5"
           >
             <Field label="Nome" value={user.name} disabled readOnly />

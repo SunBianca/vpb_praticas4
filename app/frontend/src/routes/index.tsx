@@ -1,12 +1,16 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { useSuspenseQuery, useQuery, useQueries, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useSuspenseQuery,
+  useQuery,
+  useQueries,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Check } from "lucide-react";
 import { formatBRL } from "@/lib/mockDashboard";
-import {
-  accountsQueryOptions, accountDashboardQueryOptions, type Account,
-} from "@/lib/accounts";
+import { accountsQueryOptions, accountDashboardQueryOptions, type Account } from "@/lib/accounts";
 import { transactionsQueryOptions, type Transaction } from "@/lib/transactions";
 import { schedulesQueryOptions, paySchedule, type Schedule } from "@/lib/schedules";
 import { categoriesQueryOptions, type Category } from "@/lib/categories";
@@ -20,7 +24,11 @@ import { TypeBadge } from "@/components/TypeBadge";
 import { accountLabel } from "@/components/CategoryCombobox";
 import { ReportsTab } from "@/components/ReportsTab";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 
 export const Route = createFileRoute("/")({
@@ -48,15 +56,12 @@ function DashboardPage() {
   const { data: allAccounts } = useSuspenseQuery(accountsQueryOptions);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const sessionId = mounted ? getSession()?.id ?? null : null;
+  const sessionId = mounted ? (getSession()?.id ?? null) : null;
   const accounts = useMemo(
     () => (sessionId ? allAccounts.filter((a) => a.user_id === sessionId) : []),
     [allAccounts, sessionId],
   );
-  const userAccountIds = useMemo(
-    () => new Set(accounts.map((a) => a.id)),
-    [accounts],
-  );
+  const userAccountIds = useMemo(() => new Set(accounts.map((a) => a.id)), [accounts]);
 
   const [selected, setSelected] = useState<string>("all");
   const isAll = selected === "all";
@@ -120,21 +125,27 @@ function DashboardPage() {
   }, [txQuery.data, userAccountIds, isAll, accountId]);
 
   const scopedSched = useMemo(() => {
-    let list = (schedQuery.data ?? []).filter(
-      (s) => sessionId != null && s.user_id === sessionId,
-    );
+    let list = (schedQuery.data ?? []).filter((s) => sessionId != null && s.user_id === sessionId);
     if (!isAll && accountId) list = list.filter((s) => s.account_id === accountId);
     return list;
   }, [schedQuery.data, sessionId, isAll, accountId]);
 
   const pendingExpenses = useMemo(() => {
-    const tx = scopedTx.filter((t) => isPending(t.status) && t.type === "despesa").reduce((s, t) => s + toNum(t.amount), 0);
-    const sc = scopedSched.filter((s) => isPending(s.status) && s.type === "despesa").reduce((acc, s) => acc + toNum(s.amount), 0);
+    const tx = scopedTx
+      .filter((t) => isPending(t.status) && t.type === "despesa")
+      .reduce((s, t) => s + toNum(t.amount), 0);
+    const sc = scopedSched
+      .filter((s) => isPending(s.status) && s.type === "despesa")
+      .reduce((acc, s) => acc + toNum(s.amount), 0);
     return tx + sc;
   }, [scopedTx, scopedSched]);
   const pendingIncome = useMemo(() => {
-    const tx = scopedTx.filter((t) => isPending(t.status) && t.type === "receita").reduce((s, t) => s + toNum(t.amount), 0);
-    const sc = scopedSched.filter((s) => isPending(s.status) && s.type === "receita").reduce((acc, s) => acc + toNum(s.amount), 0);
+    const tx = scopedTx
+      .filter((t) => isPending(t.status) && t.type === "receita")
+      .reduce((s, t) => s + toNum(t.amount), 0);
+    const sc = scopedSched
+      .filter((s) => isPending(s.status) && s.type === "receita")
+      .reduce((acc, s) => acc + toNum(s.amount), 0);
     return tx + sc;
   }, [scopedTx, scopedSched]);
 
@@ -175,8 +186,6 @@ function DashboardPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-
-
   return (
     <div className="space-y-10">
       <header className="flex flex-wrap items-end justify-between gap-4">
@@ -195,7 +204,9 @@ function DashboardPage() {
               Conta
             </label>
             <Select value={selected} onValueChange={setSelected}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todas as contas</SelectItem>
                 {accounts.map((a) => (
@@ -313,9 +324,7 @@ function DashboardPage() {
                   Nenhuma movimentação registrada.
                 </div>
               ) : (
-                recent.map((t) => (
-                  <TransactionRow key={t.id} t={t} accounts={accounts} />
-                ))
+                recent.map((t) => <TransactionRow key={t.id} t={t} accounts={accounts} />)
               )}
             </div>
           </section>
@@ -329,7 +338,6 @@ function DashboardPage() {
           />
         </TabsContent>
       </Tabs>
-
 
       <Dialog
         open={!!payTarget}
@@ -368,7 +376,11 @@ function DashboardPage() {
                 onChange={(e) => setPayAmount(e.target.value)}
               />
             </div>
-            <Button type="submit" disabled={payM.isPending} className="w-full font-display uppercase tracking-wide">
+            <Button
+              type="submit"
+              disabled={payM.isPending}
+              className="w-full font-display uppercase tracking-wide"
+            >
               {payM.isPending ? "Registrando..." : "Confirmar pagamento"}
             </Button>
           </form>
@@ -378,9 +390,11 @@ function DashboardPage() {
   );
 }
 
-
 function KpiCard({
-  label, value, tone, loading,
+  label,
+  value,
+  tone,
+  loading,
 }: {
   label: string;
   value: number;
@@ -388,10 +402,13 @@ function KpiCard({
   loading?: boolean;
 }) {
   const color =
-    tone === "success" ? "text-[oklch(0.85_0.25_140)]"
-    : tone === "destructive" ? "text-[oklch(0.7_0.25_25)]"
-    : tone === "warning" ? "text-yellow-300"
-    : "text-foreground";
+    tone === "success"
+      ? "text-[oklch(0.85_0.25_140)]"
+      : tone === "destructive"
+        ? "text-[oklch(0.7_0.25_25)]"
+        : tone === "warning"
+          ? "text-yellow-300"
+          : "text-foreground";
   return (
     <div className="rounded-2xl bg-card/70 p-6 ring-1 ring-white/5 backdrop-blur">
       <div className="text-sm text-muted-foreground">{label}</div>
@@ -408,9 +425,7 @@ export function TransactionRow({ t, accounts }: { t: Transaction; accounts: Acco
   return (
     <div className="flex items-center gap-4 rounded-xl bg-card/80 px-4 py-3 ring-1 ring-white/5">
       <div className="flex-1 min-w-0">
-        <div className="truncate font-display text-lg">
-          {t.description || `Transação #${t.id}`}
-        </div>
+        <div className="truncate font-display text-lg">{t.description || `Transação #${t.id}`}</div>
         <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
           <TypeBadge type={t.type} />
           <StatusBadge status={t.status} />
@@ -430,7 +445,9 @@ export function TransactionRow({ t, accounts }: { t: Transaction; accounts: Acco
 }
 
 function ScheduleRow({
-  s, categories, onPay,
+  s,
+  categories,
+  onPay,
 }: {
   s: Schedule;
   categories: Category[];
@@ -469,4 +486,3 @@ function ScheduleRow({
     </div>
   );
 }
-

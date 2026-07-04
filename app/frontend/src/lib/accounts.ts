@@ -42,8 +42,6 @@ export const accountDashboardQueryOptions = (accountId: number) =>
     queryFn: () => apiFetch<AccountDashboard>(`/accounts/${accountId}/dashboard`),
   });
 
-
-
 export const createAccount = (data: AccountInput) =>
   apiFetch<Account>("/accounts", {
     method: "POST",

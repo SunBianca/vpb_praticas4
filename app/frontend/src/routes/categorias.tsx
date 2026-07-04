@@ -11,18 +11,36 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-  categoriesQueryOptions, createCategory, updateCategory, deleteCategory,
+  categoriesQueryOptions,
+  createCategory,
+  updateCategory,
+  deleteCategory,
   type Category,
 } from "@/lib/categories";
 import { getSession } from "@/lib/users";
@@ -135,7 +153,9 @@ function CategoriesPage() {
             </Button>
           </DialogTrigger>
           <DialogContent>
-            <DialogHeader><DialogTitle>Nova categoria</DialogTitle></DialogHeader>
+            <DialogHeader>
+              <DialogTitle>Nova categoria</DialogTitle>
+            </DialogHeader>
             <Form {...createForm}>
               <form
                 onSubmit={createForm.handleSubmit((d) => createM.mutate(d))}
@@ -147,7 +167,9 @@ function CategoriesPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Nome</FormLabel>
-                      <FormControl><Input {...field} /></FormControl>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -158,7 +180,9 @@ function CategoriesPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Descrição</FormLabel>
-                      <FormControl><Input {...field} /></FormControl>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -197,7 +221,9 @@ function CategoriesPage() {
               <div className="flex items-center gap-2">
                 <span className="font-semibold">{c.name}</span>
                 {c.is_default && (
-                  <Badge variant="secondary" className="uppercase">Padrão</Badge>
+                  <Badge variant="secondary" className="uppercase">
+                    Padrão
+                  </Badge>
                 )}
               </div>
               {c.description && (
@@ -229,9 +255,7 @@ function CategoriesPage() {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => delM.mutate(c.id)}>
-                      Excluir
-                    </AlertDialogAction>
+                    <AlertDialogAction onClick={() => delM.mutate(c.id)}>Excluir</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
@@ -242,19 +266,20 @@ function CategoriesPage() {
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Editar categoria</DialogTitle></DialogHeader>
+          <DialogHeader>
+            <DialogTitle>Editar categoria</DialogTitle>
+          </DialogHeader>
           <Form {...editForm}>
-            <form
-              onSubmit={editForm.handleSubmit((d) => updateM.mutate(d))}
-              className="space-y-4"
-            >
+            <form onSubmit={editForm.handleSubmit((d) => updateM.mutate(d))} className="space-y-4">
               <FormField
                 control={editForm.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nome</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -265,7 +290,9 @@ function CategoriesPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Descrição</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

@@ -6,13 +6,22 @@ import { Check, ChevronsUpDown, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
-  Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { createCategory, type Category } from "@/lib/categories";
 
 export function CategoryCombobox({
-  categories, value, onChange, currentUserId, disabled,
+  categories,
+  value,
+  onChange,
+  currentUserId,
+  disabled,
 }: {
   categories: Category[];
   value: number;
@@ -60,7 +69,11 @@ export function CategoryCombobox({
       </PopoverTrigger>
       <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
         <Command>
-          <CommandInput placeholder="Buscar categoria..." value={search} onValueChange={setSearch} />
+          <CommandInput
+            placeholder="Buscar categoria..."
+            value={search}
+            onValueChange={setSearch}
+          />
           <CommandList>
             <CommandEmpty>
               {term ? (
@@ -89,7 +102,9 @@ export function CategoryCombobox({
                     setSearch("");
                   }}
                 >
-                  <Check className={cn("mr-2 h-4 w-4", value === c.id ? "opacity-100" : "opacity-0")} />
+                  <Check
+                    className={cn("mr-2 h-4 w-4", value === c.id ? "opacity-100" : "opacity-0")}
+                  />
                   {c.name}
                 </CommandItem>
               ))}

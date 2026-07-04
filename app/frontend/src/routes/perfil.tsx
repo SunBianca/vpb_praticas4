@@ -3,8 +3,14 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { clearSession, deleteUser, getSession, type LoginResponse } from "@/lib/users";
@@ -17,7 +23,9 @@ export const Route = createFileRoute("/perfil")({
 function PerfilPage() {
   const [user, setUser] = useState<LoginResponse | null>(null);
   const router = useRouter();
-  useEffect(() => { setUser(getSession()); }, []);
+  useEffect(() => {
+    setUser(getSession());
+  }, []);
 
   const m = useMutation({
     mutationFn: deleteUser,
@@ -45,9 +53,7 @@ function PerfilPage() {
           Nome: <span className="text-white">{user?.name ?? "—"}</span>
         </div>
 
-        {user?.email && (
-          <div className="text-sm text-muted-foreground">{user.email}</div>
-        )}
+        {user?.email && <div className="text-sm text-muted-foreground">{user.email}</div>}
 
         <AlertDialog>
           <AlertDialogTrigger asChild>

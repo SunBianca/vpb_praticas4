@@ -13,24 +13,49 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { CategoryCombobox } from "@/components/CategoryCombobox";
 import {
-  schedulesQueryOptions, createSchedule, updateSchedule, deleteSchedule, paySchedule,
-  scheduleSchema, type ScheduleInput, type Schedule,
+  schedulesQueryOptions,
+  createSchedule,
+  updateSchedule,
+  deleteSchedule,
+  paySchedule,
+  scheduleSchema,
+  type ScheduleInput,
+  type Schedule,
 } from "@/lib/schedules";
 import { categoriesQueryOptions, type Category } from "@/lib/categories";
 import { accountsQueryOptions, type Account } from "@/lib/accounts";
@@ -56,7 +81,10 @@ export const Route = createFileRoute("/agendamentos")({
 });
 
 function ScheduleFormFields({
-  form, accounts, categories, sessionUserId,
+  form,
+  accounts,
+  categories,
+  sessionUserId,
 }: {
   form: ReturnType<typeof useForm<ScheduleInput>>;
   accounts: Account[];
@@ -69,78 +97,116 @@ function ScheduleFormFields({
   return (
     <div className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
-        <FormField control={form.control} name="account_id" render={({ field }) => (
-          <FormItem className="sm:col-span-2">
-            <FormLabel>Conta</FormLabel>
-            <Select
-              onValueChange={(v) => field.onChange(Number(v))}
-              value={field.value ? String(field.value) : ""}
-            >
+        <FormField
+          control={form.control}
+          name="account_id"
+          render={({ field }) => (
+            <FormItem className="sm:col-span-2">
+              <FormLabel>Conta</FormLabel>
+              <Select
+                onValueChange={(v) => field.onChange(Number(v))}
+                value={field.value ? String(field.value) : ""}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecionar conta..." />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {accounts.length === 0 && (
+                    <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                      Nenhuma conta cadastrada
+                    </div>
+                  )}
+                  {accounts.map((a) => (
+                    <SelectItem key={a.id} value={String(a.id)}>
+                      {accountLabel(a)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="category_id"
+          render={({ field }) => (
+            <FormItem className="sm:col-span-2">
+              <FormLabel>Categoria</FormLabel>
               <FormControl>
-                <SelectTrigger><SelectValue placeholder="Selecionar conta..." /></SelectTrigger>
+                <CategoryCombobox
+                  categories={categories}
+                  value={field.value}
+                  onChange={field.onChange}
+                  currentUserId={sessionUserId}
+                />
               </FormControl>
-              <SelectContent>
-                {accounts.length === 0 && (
-                  <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                    Nenhuma conta cadastrada
-                  </div>
-                )}
-                {accounts.map((a) => (
-                  <SelectItem key={a.id} value={String(a.id)}>{accountLabel(a)}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <FormField control={form.control} name="category_id" render={({ field }) => (
-          <FormItem className="sm:col-span-2">
-            <FormLabel>Categoria</FormLabel>
-            <FormControl>
-              <CategoryCombobox
-                categories={categories}
-                value={field.value}
-                onChange={field.onChange}
-                currentUserId={sessionUserId}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <FormField control={form.control} name="type" render={({ field }) => (
-          <FormItem>
-            <FormLabel>Tipo</FormLabel>
-            <Select onValueChange={field.onChange} value={field.value}>
-              <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
-              <SelectContent>
-                <SelectItem value="receita">Receita</SelectItem>
-                <SelectItem value="despesa">Despesa</SelectItem>
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <FormField control={form.control} name="amount" render={({ field }) => (
-          <FormItem>
-            <FormLabel>Valor (R$)</FormLabel>
-            <FormControl><Input type="number" step="0.01" {...field} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <FormField control={form.control} name="due_date" render={({ field }) => (
-          <FormItem>
-            <FormLabel>Vencimento</FormLabel>
-            <FormControl><Input type="date" {...field} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <FormField control={form.control} name="description" render={({ field }) => (
-          <FormItem className="sm:col-span-2">
-            <FormLabel>Descrição (opcional)</FormLabel>
-            <FormControl><Textarea rows={2} {...field} value={field.value ?? ""} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tipo</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="receita">Receita</SelectItem>
+                  <SelectItem value="despesa">Despesa</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="amount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Valor (R$)</FormLabel>
+              <FormControl>
+                <Input type="number" step="0.01" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="due_date"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Vencimento</FormLabel>
+              <FormControl>
+                <Input type="date" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem className="sm:col-span-2">
+              <FormLabel>Descrição (opcional)</FormLabel>
+              <FormControl>
+                <Textarea rows={2} {...field} value={field.value ?? ""} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
 
       {past && (
@@ -148,7 +214,9 @@ function ScheduleFormFields({
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           <div>
             Esta data de vencimento já passou. Cadastre uma{" "}
-            <Link to="/transacoes" className="underline font-semibold">transação</Link>{" "}
+            <Link to="/transacoes" className="underline font-semibold">
+              transação
+            </Link>{" "}
             em vez de um agendamento.
           </div>
         </div>
@@ -158,7 +226,10 @@ function ScheduleFormFields({
 }
 
 function EditDialog({
-  schedule, accounts, categories, sessionUserId,
+  schedule,
+  accounts,
+  categories,
+  sessionUserId,
 }: {
   schedule: Schedule;
   accounts: Account[];
@@ -205,10 +276,17 @@ function EditDialog({
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
-        <DialogHeader><DialogTitle>Editar agendamento #{schedule.id}</DialogTitle></DialogHeader>
+        <DialogHeader>
+          <DialogTitle>Editar agendamento #{schedule.id}</DialogTitle>
+        </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit((v) => m.mutate(v))} className="space-y-4">
-            <ScheduleFormFields form={form} accounts={accounts} categories={categories} sessionUserId={sessionUserId} />
+            <ScheduleFormFields
+              form={form}
+              accounts={accounts}
+              categories={categories}
+              sessionUserId={sessionUserId}
+            />
             <Button type="submit" disabled={m.isPending || past}>
               {m.isPending ? "Salvando..." : "Salvar alterações"}
             </Button>
@@ -221,7 +299,10 @@ function EditDialog({
 
 function SchedulesPage() {
   const { data: allSchedules } = useSuspenseQuery(schedulesQueryOptions);
-  const { data: allCategories = [] } = useSuspenseQuery({ ...categoriesQueryOptions, retry: false });
+  const { data: allCategories = [] } = useSuspenseQuery({
+    ...categoriesQueryOptions,
+    retry: false,
+  });
   const { data: allAccounts = [] } = useSuspenseQuery({ ...accountsQueryOptions, retry: false });
   const qc = useQueryClient();
   const router = useRouter();
@@ -231,14 +312,15 @@ function SchedulesPage() {
   const session = mounted ? getSession() : null;
   const sessionUserId = session?.id ?? null;
 
-  const accounts = sessionUserId != null
-    ? allAccounts.filter((a) => a.user_id === sessionUserId)
-    : [];
+  const accounts =
+    sessionUserId != null ? allAccounts.filter((a) => a.user_id === sessionUserId) : [];
   const categories = allCategories.filter(
     (c) => c.user_id == null || (sessionUserId != null && c.user_id === sessionUserId),
   );
   const schedules = sessionUserId
-    ? allSchedules.filter((s) => s.user_id === sessionUserId && String(s.status).toLowerCase() !== "pago")
+    ? allSchedules.filter(
+        (s) => s.user_id === sessionUserId && String(s.status).toLowerCase() !== "pago",
+      )
     : [];
 
   const form = useForm<ScheduleInput>({
@@ -311,8 +393,6 @@ function SchedulesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-
-
   return (
     <div className="space-y-8">
       <header className="flex items-end justify-between">
@@ -327,11 +407,22 @@ function SchedulesPage() {
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
-            <DialogHeader><DialogTitle>Novo agendamento</DialogTitle></DialogHeader>
+            <DialogHeader>
+              <DialogTitle>Novo agendamento</DialogTitle>
+            </DialogHeader>
             <Form {...form}>
               <form onSubmit={form.handleSubmit((v) => createM.mutate(v))} className="space-y-4">
-                <ScheduleFormFields form={form} accounts={accounts} categories={categories} sessionUserId={sessionUserId} />
-                <Button type="submit" disabled={createM.isPending || past} className="font-display uppercase tracking-wide">
+                <ScheduleFormFields
+                  form={form}
+                  accounts={accounts}
+                  categories={categories}
+                  sessionUserId={sessionUserId}
+                />
+                <Button
+                  type="submit"
+                  disabled={createM.isPending || past}
+                  className="font-display uppercase tracking-wide"
+                >
                   {createM.isPending ? "Criando..." : "Criar"}
                 </Button>
               </form>
@@ -349,22 +440,31 @@ function SchedulesPage() {
         {schedules.map((s) => {
           const cat = allCategories.find((c) => c.id === s.category_id);
           return (
-            <div key={s.id} className="flex items-center gap-4 rounded-2xl bg-card/70 p-4 ring-1 ring-white/5">
+            <div
+              key={s.id}
+              className="flex items-center gap-4 rounded-2xl bg-card/70 p-4 ring-1 ring-white/5"
+            >
               <div className="flex-1">
-                <div className="font-display text-lg">{s.description || `Agendamento #${s.id}`}</div>
+                <div className="font-display text-lg">
+                  {s.description || `Agendamento #${s.id}`}
+                </div>
                 <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                   <TypeBadge type={s.type} />
-                  
+
                   {cat && <span>· {cat.name}</span>}
                   <span>
                     · Vence em{" "}
-                    {mounted ? new Date(s.due_date).toLocaleDateString("pt-BR") : s.due_date.slice(0, 10)}
+                    {mounted
+                      ? new Date(s.due_date).toLocaleDateString("pt-BR")
+                      : s.due_date.slice(0, 10)}
                   </span>
                 </div>
               </div>
-              <div className={`font-display text-xl ${
-                s.type === "receita" ? "text-[oklch(0.85_0.25_140)]" : "text-[oklch(0.7_0.25_25)]"
-              }`}>
+              <div
+                className={`font-display text-xl ${
+                  s.type === "receita" ? "text-[oklch(0.85_0.25_140)]" : "text-[oklch(0.7_0.25_25)]"
+                }`}
+              >
                 R$ {formatBRL(s.amount)}
               </div>
               {String(s.status).toLowerCase() !== "pago" && (
@@ -381,7 +481,12 @@ function SchedulesPage() {
                 </Button>
               )}
 
-              <EditDialog schedule={s} accounts={accounts} categories={categories} sessionUserId={sessionUserId} />
+              <EditDialog
+                schedule={s}
+                accounts={accounts}
+                categories={categories}
+                sessionUserId={sessionUserId}
+              />
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="ghost" size="icon" aria-label="Excluir">
@@ -441,7 +546,11 @@ function SchedulesPage() {
                 onChange={(e) => setPayAmount(e.target.value)}
               />
             </div>
-            <Button type="submit" disabled={payM.isPending} className="w-full font-display uppercase tracking-wide">
+            <Button
+              type="submit"
+              disabled={payM.isPending}
+              className="w-full font-display uppercase tracking-wide"
+            >
               {payM.isPending ? "Registrando..." : "Confirmar pagamento"}
             </Button>
           </form>
@@ -450,4 +559,3 @@ function SchedulesPage() {
     </div>
   );
 }
-

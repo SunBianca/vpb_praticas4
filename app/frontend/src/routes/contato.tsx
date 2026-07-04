@@ -10,7 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { apiFetch } from "@/lib/api";
 import { getSession } from "@/lib/users";
@@ -61,39 +66,56 @@ function ContatoPage() {
       <h1 className="font-display text-5xl sm:text-6xl">Contate-nos</h1>
 
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit((v) => mut.mutate(v))}
-          className="mt-8 space-y-6"
-        >
-          <FormField control={form.control} name="name" render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-display text-xl">Seu nome:</FormLabel>
-              <FormControl>
-                <Input {...field} className="h-14 rounded-2xl bg-white/5 border-white/10" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
+        <form onSubmit={form.handleSubmit((v) => mut.mutate(v))} className="mt-8 space-y-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-display text-xl">Seu nome:</FormLabel>
+                <FormControl>
+                  <Input {...field} className="h-14 rounded-2xl bg-white/5 border-white/10" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          <FormField control={form.control} name="email" render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-display text-xl">Seu email:</FormLabel>
-              <FormControl>
-                <Input type="email" {...field} className="h-14 rounded-2xl bg-white/5 border-white/10" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-display text-xl">Seu email:</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    {...field}
+                    className="h-14 rounded-2xl bg-white/5 border-white/10"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          <FormField control={form.control} name="message" render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-display text-xl">Descreva seu problema</FormLabel>
-              <FormControl>
-                <Textarea {...field} rows={6} className="rounded-2xl bg-white/5 border-white/10" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
+          <FormField
+            control={form.control}
+            name="message"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-display text-xl">Descreva seu problema</FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    rows={6}
+                    className="rounded-2xl bg-white/5 border-white/10"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <Button
             type="submit"

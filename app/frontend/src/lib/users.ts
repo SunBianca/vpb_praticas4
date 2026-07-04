@@ -25,8 +25,7 @@ export const usersQueryOptions = queryOptions({
 export const createUser = (data: UserInput) =>
   apiFetch<User>("/users", { method: "POST", body: JSON.stringify(data) });
 
-export const deleteUser = (id: number) =>
-  apiFetch<void>(`/users/${id}`, { method: "DELETE" });
+export const deleteUser = (id: number) => apiFetch<void>(`/users/${id}`, { method: "DELETE" });
 
 export const updatePassword = (id: number, password: string) =>
   apiFetch<void>(`/users/${id}/password?new_password=${encodeURIComponent(password)}`, {

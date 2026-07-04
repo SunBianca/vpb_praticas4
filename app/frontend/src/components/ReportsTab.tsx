@@ -1,6 +1,13 @@
 import { useMemo, useState } from "react";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
 } from "recharts";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -19,12 +26,22 @@ const toNum = (v: unknown) => {
 
 // Stable palette for categories
 const PALETTE = [
-  "#a855f7", "#22d3ee", "#f59e0b", "#10b981", "#ef4444",
-  "#6366f1", "#ec4899", "#84cc16", "#f97316", "#14b8a6",
+  "#a855f7",
+  "#22d3ee",
+  "#f59e0b",
+  "#10b981",
+  "#ef4444",
+  "#6366f1",
+  "#ec4899",
+  "#84cc16",
+  "#f97316",
+  "#14b8a6",
 ];
 
 export function ReportsTab({
-  transactions, accounts, categories,
+  transactions,
+  accounts,
+  categories,
 }: {
   transactions: Transaction[];
   accounts: Account[];
@@ -39,7 +56,10 @@ export function ReportsTab({
 
   // Build chart data: x = day, one series per "Categoria (tipo)"
   const { chartData, series } = useMemo(() => {
-    const seriesMap = new Map<string, { key: string; categoryId: number; type: string; name: string }>();
+    const seriesMap = new Map<
+      string,
+      { key: string; categoryId: number; type: string; name: string }
+    >();
     const dayBuckets = new Map<string, Record<string, number>>();
 
     for (const t of filtered) {
@@ -67,7 +87,8 @@ export function ReportsTab({
   }, [filtered, categories]);
 
   const totals = useMemo(() => {
-    let receita = 0, despesa = 0;
+    let receita = 0,
+      despesa = 0;
     for (const t of filtered) {
       if (t.type === "receita") receita += toNum(t.amount);
       else if (t.type === "despesa") despesa += toNum(t.amount);
@@ -98,11 +119,15 @@ export function ReportsTab({
         <div className="ml-auto flex gap-4 text-sm">
           <div>
             <span className="text-muted-foreground">Receitas: </span>
-            <span className="font-display text-[oklch(0.85_0.25_140)]">R$ {formatBRL(totals.receita)}</span>
+            <span className="font-display text-[oklch(0.85_0.25_140)]">
+              R$ {formatBRL(totals.receita)}
+            </span>
           </div>
           <div>
             <span className="text-muted-foreground">Despesas: </span>
-            <span className="font-display text-[oklch(0.7_0.25_25)]">R$ {formatBRL(totals.despesa)}</span>
+            <span className="font-display text-[oklch(0.7_0.25_25)]">
+              R$ {formatBRL(totals.despesa)}
+            </span>
           </div>
         </div>
       </div>
@@ -165,7 +190,10 @@ export function ReportsTab({
                 const cat = categories.find((c) => c.id === t.category_id);
                 const isIncome = t.type === "receita";
                 return (
-                  <div key={t.id} className="flex items-center gap-4 rounded-xl bg-card/80 px-4 py-3 ring-1 ring-white/5">
+                  <div
+                    key={t.id}
+                    className="flex items-center gap-4 rounded-xl bg-card/80 px-4 py-3 ring-1 ring-white/5"
+                  >
                     <div className="min-w-0 flex-1">
                       <div className="truncate font-display text-lg">
                         {t.description || `Transação #${t.id}`}
@@ -178,9 +206,11 @@ export function ReportsTab({
                         <span>{new Date(t.date).toLocaleDateString("pt-BR")}</span>
                       </div>
                     </div>
-                    <div className={`font-display text-base ${
-                      isIncome ? "text-[oklch(0.85_0.25_140)]" : "text-[oklch(0.7_0.25_25)]"
-                    }`}>
+                    <div
+                      className={`font-display text-base ${
+                        isIncome ? "text-[oklch(0.85_0.25_140)]" : "text-[oklch(0.7_0.25_25)]"
+                      }`}
+                    >
                       R$ {formatBRL(t.amount)}
                     </div>
                   </div>

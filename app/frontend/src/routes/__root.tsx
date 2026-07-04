@@ -11,7 +11,16 @@ import {
 import { useEffect, useState, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import {
-  LogOut, UserCircle, LayoutDashboard, ArrowLeftRight, CalendarClock, Wallet, Tags, Menu, X, Mail,
+  LogOut,
+  UserCircle,
+  LayoutDashboard,
+  ArrowLeftRight,
+  CalendarClock,
+  Wallet,
+  Tags,
+  Menu,
+  X,
+  Mail,
 } from "lucide-react";
 import { getSession, clearSession, type LoginResponse } from "@/lib/users";
 
@@ -24,7 +33,10 @@ function NotFoundComponent() {
       <div>
         <h1 className="font-display text-7xl text-foreground">404</h1>
         <p className="mt-2 text-sm text-muted-foreground">Página não encontrada.</p>
-        <Link to="/" className="mt-6 inline-block rounded-lg bg-primary px-4 py-2 font-display text-primary-foreground">
+        <Link
+          to="/"
+          className="mt-6 inline-block rounded-lg bg-primary px-4 py-2 font-display text-primary-foreground"
+        >
           Voltar
         </Link>
       </div>
@@ -43,7 +55,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <h1 className="font-display text-2xl">Algo deu errado</h1>
         <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
         <button
-          onClick={() => { router.invalidate(); reset(); }}
+          onClick={() => {
+            router.invalidate();
+            reset();
+          }}
           className="mt-6 rounded-lg bg-primary px-4 py-2 font-display text-primary-foreground"
         >
           Tentar novamente
@@ -64,8 +79,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:title", content: "VPB Finanças — Painel" },
       { property: "og:description", content: "Painel financeiro VPB com agendamentos e contas." },
       { name: "twitter:description", content: "Painel financeiro VPB com agendamentos e contas." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/752b2443-1e69-4a73-8679-49f03f2704e6/id-preview-6fac860d--e7c5b6ae-9c18-4a0e-ab8a-6c22ff872f29.lovable.app-1782161051819.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/752b2443-1e69-4a73-8679-49f03f2704e6/id-preview-6fac860d--e7c5b6ae-9c18-4a0e-ab8a-6c22ff872f29.lovable.app-1782161051819.png" },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/752b2443-1e69-4a73-8679-49f03f2704e6/id-preview-6fac860d--e7c5b6ae-9c18-4a0e-ab8a-6c22ff872f29.lovable.app-1782161051819.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/752b2443-1e69-4a73-8679-49f03f2704e6/id-preview-6fac860d--e7c5b6ae-9c18-4a0e-ab8a-6c22ff872f29.lovable.app-1782161051819.png",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:type", content: "website" },
     ],
@@ -88,7 +111,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR">
-      <head><HeadContent /></head>
+      <head>
+        <HeadContent />
+      </head>
       <body>
         {children}
         <Scripts />
@@ -116,7 +141,8 @@ function RootComponent() {
     };
   }, []);
 
-  const isAuthPage = pathname === "/login" || pathname === "/cadastro" || pathname === "/recuperar-senha";
+  const isAuthPage =
+    pathname === "/login" || pathname === "/cadastro" || pathname === "/recuperar-senha";
 
   useEffect(() => {
     if (!mounted) return;
@@ -185,30 +211,19 @@ function SidebarLayout({ user, children }: { user: LoginResponse; children: Reac
       {/* Mobile drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div
-            className="absolute inset-0 bg-black/60"
-            onClick={() => setMobileOpen(false)}
-          />
+          <div className="absolute inset-0 bg-black/60" onClick={() => setMobileOpen(false)} />
           <div className="absolute inset-y-0 left-0 w-72 max-w-[85vw]">
-            <Sidebar
-              user={user}
-              onClose={() => setMobileOpen(false)}
-              showClose
-            />
+            <Sidebar user={user} onClose={() => setMobileOpen(false)} showClose />
           </div>
         </div>
       )}
 
       <main className="min-w-0 flex-1 bg-triangles">
-        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
-          {children}
-        </div>
+        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">{children}</div>
       </main>
     </div>
   );
 }
-
-
 
 function Sidebar({
   user,
@@ -220,7 +235,6 @@ function Sidebar({
   showClose?: boolean;
 }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-
 
   const initial = (user.name?.[0] ?? "U").toUpperCase();
 
@@ -278,8 +292,6 @@ function Sidebar({
         })}
       </nav>
 
-
-
       {/* Footer */}
       <div className="space-y-2 border-t border-white/5 pt-4 text-sm">
         <Link
@@ -315,4 +327,3 @@ function Sidebar({
     </aside>
   );
 }
-

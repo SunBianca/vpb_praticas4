@@ -26,7 +26,7 @@ function HistoricoPage() {
   const { data: accounts } = useSuspenseQuery(accountsQueryOptions);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const sessionId = mounted ? getSession()?.id ?? null : null;
+  const sessionId = mounted ? (getSession()?.id ?? null) : null;
 
   const sorted = useMemo(() => {
     const ids = new Set(
@@ -39,9 +39,7 @@ function HistoricoPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-center font-display text-3xl sm:text-4xl">
-        Histórico de movimentações
-      </h1>
+      <h1 className="text-center font-display text-3xl sm:text-4xl">Histórico de movimentações</h1>
       <div className="space-y-3 rounded-2xl bg-card/60 p-4 ring-1 ring-white/5">
         {sorted.length === 0 ? (
           <div className="p-4 text-center text-sm text-muted-foreground">

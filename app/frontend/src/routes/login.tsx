@@ -4,9 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import {
-  login, saveSession, loginSchema, type LoginInput,
-} from "@/lib/users";
+import { login, saveSession, loginSchema, type LoginInput } from "@/lib/users";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Entrar — VPB" }] }),
@@ -40,7 +38,10 @@ function LoginPage() {
           </h1>
           <p className="text-center text-sm text-lavender-foreground/80">
             Não tem conta?{" "}
-            <Link to="/cadastro" className="font-semibold text-white underline-offset-2 hover:underline">
+            <Link
+              to="/cadastro"
+              className="font-semibold text-white underline-offset-2 hover:underline"
+            >
               Cadastre-se
             </Link>
           </p>
@@ -71,7 +72,10 @@ function LoginPage() {
           </button>
 
           <p className="text-center text-sm">
-            <Link to="/recuperar-senha" className="text-lavender-foreground/80 underline-offset-2 hover:underline">
+            <Link
+              to="/recuperar-senha"
+              className="text-lavender-foreground/80 underline-offset-2 hover:underline"
+            >
               Esqueci minha senha
             </Link>
           </p>

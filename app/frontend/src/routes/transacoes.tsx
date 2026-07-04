@@ -12,29 +12,51 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { CategoryCombobox, accountLabel } from "@/components/CategoryCombobox";
 import {
-  transactionsQueryOptions, createTransaction, updateTransaction, deleteTransaction,
-  transactionSchema, type TransactionInput, type Transaction,
+  transactionsQueryOptions,
+  createTransaction,
+  updateTransaction,
+  deleteTransaction,
+  transactionSchema,
+  type TransactionInput,
+  type Transaction,
 } from "@/lib/transactions";
 import { accountsQueryOptions, type Account } from "@/lib/accounts";
-import {
-  categoriesQueryOptions, type Category,
-} from "@/lib/categories";
+import { categoriesQueryOptions, type Category } from "@/lib/categories";
 import { formatBRL } from "@/lib/mockDashboard";
 import { getSession } from "@/lib/users";
 
@@ -49,9 +71,11 @@ export const Route = createFileRoute("/transacoes")({
   notFoundComponent: () => <div>Nada encontrado.</div>,
 });
 
-
 function TransactionFormFields({
-  form, accounts, categories, currentUserId,
+  form,
+  accounts,
+  categories,
+  currentUserId,
 }: {
   form: ReturnType<typeof useForm<TransactionInput>>;
   accounts: Account[];
@@ -60,111 +84,152 @@ function TransactionFormFields({
 }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      <FormField control={form.control} name="account_id" render={({ field }) => (
-        <FormItem>
-          <FormLabel>Conta</FormLabel>
-          <Select
-            onValueChange={(v) => field.onChange(Number(v))}
-            value={field.value ? String(field.value) : ""}
-          >
+      <FormField
+        control={form.control}
+        name="account_id"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Conta</FormLabel>
+            <Select
+              onValueChange={(v) => field.onChange(Number(v))}
+              value={field.value ? String(field.value) : ""}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecionar conta..." />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {accounts.length === 0 && (
+                  <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                    Nenhuma conta cadastrada
+                  </div>
+                )}
+                {accounts.map((a) => (
+                  <SelectItem key={a.id} value={String(a.id)}>
+                    {accountLabel(a)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="category_id"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Categoria</FormLabel>
             <FormControl>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecionar conta..." />
-              </SelectTrigger>
+              <CategoryCombobox
+                categories={categories}
+                value={field.value}
+                onChange={field.onChange}
+                currentUserId={currentUserId}
+              />
             </FormControl>
-            <SelectContent>
-              {accounts.length === 0 && (
-                <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                  Nenhuma conta cadastrada
-                </div>
-              )}
-              {accounts.map((a) => (
-                <SelectItem key={a.id} value={String(a.id)}>
-                  {accountLabel(a)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <FormMessage />
-        </FormItem>
-      )} />
-      <FormField control={form.control} name="category_id" render={({ field }) => (
-        <FormItem>
-          <FormLabel>Categoria</FormLabel>
-          <FormControl>
-            <CategoryCombobox
-              categories={categories}
-              value={field.value}
-              onChange={field.onChange}
-              currentUserId={currentUserId}
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )} />
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
-      <FormField control={form.control} name="type" render={({ field }) => (
-        <FormItem>
-          <FormLabel>Tipo</FormLabel>
-          <Select onValueChange={field.onChange} value={field.value}>
-            <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
-            <SelectContent>
-              <SelectItem value="receita">Receita</SelectItem>
-              <SelectItem value="despesa">Despesa</SelectItem>
-            </SelectContent>
-          </Select>
-          <FormMessage />
-        </FormItem>
-      )} />
-      <FormField control={form.control} name="amount" render={({ field }) => (
-        <FormItem>
-          <FormLabel>Valor (R$)</FormLabel>
-          <FormControl><Input type="number" step="0.01" {...field} /></FormControl>
-          <FormMessage />
-        </FormItem>
-      )} />
-      <FormField control={form.control} name="date" render={({ field }) => (
-        <FormItem>
-          <FormLabel>Data</FormLabel>
-          <FormControl><Input type="date" {...field} /></FormControl>
-          <FormMessage />
-        </FormItem>
-      )} />
-      <FormField control={form.control} name="schedule_id" render={({ field }) => (
-        <FormItem>
-          <FormLabel>ID do agendamento (opcional)</FormLabel>
-          <FormControl>
-            <Input
-              type="number"
-              min="1"
-              value={field.value ?? ""}
-              onChange={(e) => field.onChange(e.target.value === "" ? null : Number(e.target.value))}
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )} />
-      <FormField control={form.control} name="description" render={({ field }) => (
-        <FormItem className="sm:col-span-2">
-          <FormLabel>Descrição (opcional)</FormLabel>
-          <FormControl><Textarea rows={2} {...field} value={field.value ?? ""} /></FormControl>
-          <FormMessage />
-        </FormItem>
-      )} />
+      <FormField
+        control={form.control}
+        name="type"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Tipo</FormLabel>
+            <Select onValueChange={field.onChange} value={field.value}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value="receita">Receita</SelectItem>
+                <SelectItem value="despesa">Despesa</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="amount"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Valor (R$)</FormLabel>
+            <FormControl>
+              <Input type="number" step="0.01" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="date"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Data</FormLabel>
+            <FormControl>
+              <Input type="date" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="schedule_id"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>ID do agendamento (opcional)</FormLabel>
+            <FormControl>
+              <Input
+                type="number"
+                min="1"
+                value={field.value ?? ""}
+                onChange={(e) =>
+                  field.onChange(e.target.value === "" ? null : Number(e.target.value))
+                }
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="description"
+        render={({ field }) => (
+          <FormItem className="sm:col-span-2">
+            <FormLabel>Descrição (opcional)</FormLabel>
+            <FormControl>
+              <Textarea rows={2} {...field} value={field.value ?? ""} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </div>
   );
 }
 
-
 function EditDialog({
-  tx, accounts, categories, currentUserId,
+  tx,
+  accounts,
+  categories,
+  currentUserId,
 }: {
   tx: Transaction;
   accounts: Account[];
   categories: Category[];
   currentUserId: number | null;
 }) {
-
   const [open, setOpen] = useState(false);
   const qc = useQueryClient();
   const router = useRouter();
@@ -202,10 +267,17 @@ function EditDialog({
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
-        <DialogHeader><DialogTitle>Editar transação #{tx.id}</DialogTitle></DialogHeader>
+        <DialogHeader>
+          <DialogTitle>Editar transação #{tx.id}</DialogTitle>
+        </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit((v) => m.mutate(v))} className="space-y-4">
-            <TransactionFormFields form={form} accounts={accounts} categories={categories} currentUserId={currentUserId} />
+            <TransactionFormFields
+              form={form}
+              accounts={accounts}
+              categories={categories}
+              currentUserId={currentUserId}
+            />
 
             <Button type="submit" disabled={m.isPending}>
               {m.isPending ? "Salvando..." : "Salvar alterações"}
@@ -223,27 +295,31 @@ function TransactionsPage() {
     retry: false,
   });
   const { data: allAccounts = [] } = useSuspenseQuery({ ...accountsQueryOptions, retry: false });
-  const { data: allCategories = [] } = useSuspenseQuery({ ...categoriesQueryOptions, retry: false });
+  const { data: allCategories = [] } = useSuspenseQuery({
+    ...categoriesQueryOptions,
+    retry: false,
+  });
   const sessionId = getSession()?.id;
   const [dateMode, setDateMode] = useState<"month" | "day">("month");
   const [period, setPeriod] = useState<string>("all");
   const [search, setSearch] = useState("");
-  const accounts = sessionId != null
-    ? allAccounts.filter((a) => a.user_id === sessionId)
-    : [];
+  const accounts = sessionId != null ? allAccounts.filter((a) => a.user_id === sessionId) : [];
   const userAccountIds = new Set(accounts.map((a) => a.id));
   const scopedTx = allTransactions.filter((t) => userAccountIds.has(t.account_id));
-  const byPeriod = period === "all"
-    ? scopedTx
-    : scopedTx.filter((t) => {
-        const d = (t.date ?? "");
-        return dateMode === "month" ? d.slice(0, 7) === period : d.slice(0, 10) === period;
-      });
+  const byPeriod =
+    period === "all"
+      ? scopedTx
+      : scopedTx.filter((t) => {
+          const d = t.date ?? "";
+          return dateMode === "month" ? d.slice(0, 7) === period : d.slice(0, 10) === period;
+        });
   const term = search.trim().toLowerCase();
   const transactions = term
     ? byPeriod.filter((t) => {
         const desc = (t.description ?? "").toLowerCase();
-        const catName = (allCategories.find((c) => c.id === t.category_id)?.name ?? "").toLowerCase();
+        const catName = (
+          allCategories.find((c) => c.id === t.category_id)?.name ?? ""
+        ).toLowerCase();
         return desc.includes(term) || catName.includes(term);
       })
     : byPeriod;
@@ -262,9 +338,11 @@ function TransactionsPage() {
       account_id: accounts[0]?.id ?? 0,
       category_id: categories[0]?.id ?? 0,
       schedule_id: null,
-      type: "despesa", amount: 0,
+      type: "despesa",
+      amount: 0,
       date: new Date().toISOString().slice(0, 10),
-      description: "", status: "completed",
+      description: "",
+      status: "completed",
     },
   });
 
@@ -317,11 +395,22 @@ function TransactionsPage() {
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
-            <DialogHeader><DialogTitle>Nova transação</DialogTitle></DialogHeader>
+            <DialogHeader>
+              <DialogTitle>Nova transação</DialogTitle>
+            </DialogHeader>
             <Form {...form}>
               <form onSubmit={form.handleSubmit((v) => createM.mutate(v))} className="space-y-4">
-                <TransactionFormFields form={form} accounts={accounts} categories={categories} currentUserId={sessionId ?? null} />
-                <Button type="submit" disabled={createM.isPending} className="font-display uppercase tracking-wide">
+                <TransactionFormFields
+                  form={form}
+                  accounts={accounts}
+                  categories={categories}
+                  currentUserId={sessionId ?? null}
+                />
+                <Button
+                  type="submit"
+                  disabled={createM.isPending}
+                  className="font-display uppercase tracking-wide"
+                >
                   {createM.isPending ? "Criando..." : "Criar"}
                 </Button>
               </form>
@@ -342,7 +431,9 @@ function TransactionsPage() {
           />
         </div>
         <div className="space-y-1">
-          <label className="text-xs uppercase tracking-wide text-muted-foreground">Filtrar por</label>
+          <label className="text-xs uppercase tracking-wide text-muted-foreground">
+            Filtrar por
+          </label>
           <Select
             value={dateMode}
             onValueChange={(v: "month" | "day") => {
@@ -354,7 +445,9 @@ function TransactionsPage() {
               );
             }}
           >
-            <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="w-32">
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="month">Mês</SelectItem>
               <SelectItem value="day">Dia</SelectItem>
@@ -407,7 +500,6 @@ function TransactionsPage() {
         </div>
       </div>
 
-
       {error ? (
         <div className="rounded-2xl bg-card/70 p-6 text-sm text-muted-foreground ring-1 ring-white/5">
           Não foi possível carregar a lista de transações: {String((error as Error).message)}
@@ -423,9 +515,14 @@ function TransactionsPage() {
             const acc = accounts.find((a) => a.id === t.account_id);
             const cat = allCategories.find((c) => c.id === t.category_id);
             return (
-              <div key={t.id} className="flex items-center gap-4 rounded-2xl bg-card/70 p-4 ring-1 ring-white/5">
+              <div
+                key={t.id}
+                className="flex items-center gap-4 rounded-2xl bg-card/70 p-4 ring-1 ring-white/5"
+              >
                 <div className="flex-1">
-                  <div className="font-display text-lg">{t.description || `Transação #${t.id}`}</div>
+                  <div className="font-display text-lg">
+                    {t.description || `Transação #${t.id}`}
+                  </div>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                     <TypeBadge type={t.type} />
                     <StatusBadge status={t.status} />
@@ -437,17 +534,28 @@ function TransactionsPage() {
                   </div>
                 </div>
                 {(() => {
-                  const pending = String(t.status ?? "").toLowerCase() === "pendente" || String(t.status ?? "").toLowerCase() === "pending";
+                  const pending =
+                    String(t.status ?? "").toLowerCase() === "pendente" ||
+                    String(t.status ?? "").toLowerCase() === "pending";
                   const hide = pending && t.type === "despesa";
                   return (
-                    <div className={`font-display text-xl ${
-                      t.type === "receita" ? "text-[oklch(0.85_0.25_140)]" : "text-[oklch(0.7_0.25_25)]"
-                    }`}>
+                    <div
+                      className={`font-display text-xl ${
+                        t.type === "receita"
+                          ? "text-[oklch(0.85_0.25_140)]"
+                          : "text-[oklch(0.7_0.25_25)]"
+                      }`}
+                    >
                       {hide ? "—" : `R$ ${formatBRL(t.amount)}`}
                     </div>
                   );
                 })()}
-                <EditDialog tx={t} accounts={accounts} categories={categories} currentUserId={sessionId ?? null} />
+                <EditDialog
+                  tx={t}
+                  accounts={accounts}
+                  categories={categories}
+                  currentUserId={sessionId ?? null}
+                />
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="ghost" size="icon" aria-label="Excluir">
@@ -461,7 +569,9 @@ function TransactionsPage() {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => delM.mutate(t.id)}>Excluir</AlertDialogAction>
+                      <AlertDialogAction onClick={() => delM.mutate(t.id)}>
+                        Excluir
+                      </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>

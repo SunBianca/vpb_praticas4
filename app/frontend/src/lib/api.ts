@@ -1,9 +1,14 @@
 export const API_BASE = "https://vpb-praticas.onrender.com";
 
-export async function apiFetch<T = unknown>(
-  path: string,
-  init?: RequestInit,
-): Promise<T> {
+type ApiErrorDetailItem = {
+  msg?: string;
+};
+
+type ApiErrorBody = {
+  detail?: string | ApiErrorDetailItem[];
+};
+
+export async function apiFetch<T = unknown>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
     ...init,
     headers: {
@@ -16,10 +21,10 @@ export async function apiFetch<T = unknown>(
   if (!res.ok) {
     let msg = `${res.status} ${res.statusText}`;
     try {
-      const body = await res.json();
+      const body = (await res.json()) as ApiErrorBody;
       if (body?.detail) {
         msg = Array.isArray(body.detail)
-          ? body.detail.map((d: any) => d.msg ?? JSON.stringify(d)).join("; ")
+          ? body.detail.map((d) => d.msg ?? JSON.stringify(d)).join("; ")
           : String(body.detail);
       }
     } catch {

@@ -4,9 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import {
-  createUser, login, saveSession, userSchema, type UserInput,
-} from "@/lib/users";
+import { createUser, login, saveSession, userSchema, type UserInput } from "@/lib/users";
 import { Field } from "./login";
 
 export const Route = createFileRoute("/cadastro")({
@@ -44,7 +42,10 @@ function SignupPage() {
           </h1>
           <p className="text-center text-sm text-lavender-foreground/80">
             Já tem conta?{" "}
-            <Link to="/login" className="font-semibold text-white underline-offset-2 hover:underline">
+            <Link
+              to="/login"
+              className="font-semibold text-white underline-offset-2 hover:underline"
+            >
               Entrar
             </Link>
           </p>
