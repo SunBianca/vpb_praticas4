@@ -1,4 +1,4 @@
-export const API_BASE = "https://vpb-praticas.onrender.com";
+export const API_BASE = "https://vpb-praticas4.onrender.com";
 
 type ApiErrorDetailItem = {
   msg?: string;
