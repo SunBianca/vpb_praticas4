@@ -2,15 +2,22 @@
 
 UNIVERSIDADE DO OESTE DE SANTA CATARINA - UNOESC
 
-Disciplina: Práticas Extensionistas III
+Disciplina: Práticas Extensionistas IV
 
 ## Alunos
 - **[Bianca Aparecida de Almeida Pinto Paz](https://github.com/AkianBiah)** - Código: 447086  
   Curso: Análise e Desenvolvimento de Sistemas
 
+  - **[Camila Bez]().** - Código: 230647  
+  Curso: Análise e Desenvolvimento de Sistemas
+
+ - **[Gabriela Palla]()** - Código: 368273
+  Curso: Análise e Desenvolvimento de Sistemas
+
+(Em Práticas Extensionistas III, o projeto foi feito junto com o seguinte aluno:)
 - **[Victor Lermen](https://github.com/arkherim)** - Código: 230647  
   Curso: Ciência de Dados e Inteligência Artificial
-
+  
 ## Documentação Consolidada
 - [Relatório Final (PDF)](./docs/misc/Victor%20e%20Bianca%20-%20Praticas%203.pdf)
 
