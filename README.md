@@ -23,7 +23,7 @@ Disciplina: Práticas Extensionistas IV
 
 ### Infraestrutura e Deploy
 
-O sistema está hospedado em nuvem e pode ser acessado em: **[vpb-praticas.vercel.app](https://vpb-praticas.vercel.app/)**
+O sistema está hospedado em nuvem e pode ser acessado em: **[vpb-praticas.vercel.app](https://vpb-praticas4.vercel.app/)**
 
 Serviços utilizados:
 
