@@ -427,7 +427,7 @@ function TransactionsPage() {
             placeholder="Descrição ou categoria..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-64"
+            className="w-full sm:w-64"
           />
         </div>
         <div className="space-y-1">
@@ -445,7 +445,7 @@ function TransactionsPage() {
               );
             }}
           >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-full sm:w-32">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -462,7 +462,7 @@ function TransactionsPage() {
             type={dateMode === "month" ? "month" : "date"}
             value={period === "all" ? "" : period}
             onChange={(e) => setPeriod(e.target.value || "all")}
-            className="w-44"
+            className="w-full sm:w-44"
           />
         </div>
         <Button

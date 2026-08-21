@@ -105,7 +105,7 @@ export function ReportsTab({
             type="month"
             value={period}
             onChange={(e) => setPeriod(e.target.value || new Date().toISOString().slice(0, 7))}
-            className="w-44"
+            className="w-full sm:w-44"
           />
         </div>
         <Button
@@ -116,7 +116,7 @@ export function ReportsTab({
         >
           Mês atual
         </Button>
-        <div className="ml-auto flex gap-4 text-sm">
+        <div className="flex w-full flex-wrap gap-x-4 gap-y-2 text-sm sm:ml-auto sm:w-auto">
           <div>
             <span className="text-muted-foreground">Receitas: </span>
             <span className="font-display text-[oklch(0.85_0.25_140)]">

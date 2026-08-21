@@ -73,9 +73,20 @@
   }
   html,
   body {
+    min-width: 320px;
+    min-height: 100%;
+    overflow-x: hidden;
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  :where(input, select, textarea) {
+    max-width: 100%;
   }
 }
 

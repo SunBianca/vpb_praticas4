@@ -78,6 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:title", content: "VPB Finanças — Painel" },
       { property: "og:description", content: "Painel financeiro VPB com agendamentos e contas." },
       { name: "twitter:description", content: "Painel financeiro VPB com agendamentos e contas." },
+      { name: "theme-color", content: "#0f0d14" },
       {
         property: "og:image",
         content:
@@ -93,6 +94,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/pwa-192.svg" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -127,6 +130,14 @@ function RootComponent() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [user, setUser] = useState<LoginResponse | null>(null);
   const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
+
+    void import("virtual:pwa-register").then(({ registerSW }) => {
+      registerSW({ immediate: true });
+    });
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -186,7 +197,7 @@ function SidebarLayout({ user, children }: { user: LoginResponse; children: Reac
   }, [pathname]);
 
   return (
-    <div className="min-h-screen bg-background lg:flex">
+    <div className="min-h-screen min-w-0 overflow-x-hidden bg-background lg:flex">
       {/* Mobile top bar */}
       <header className="sticky top-0 z-30 flex items-center justify-between border-b border-white/5 bg-black px-4 py-3 lg:hidden">
         <button
@@ -211,7 +222,7 @@ function SidebarLayout({ user, children }: { user: LoginResponse; children: Reac
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="absolute inset-0 bg-black/60" onClick={() => setMobileOpen(false)} />
-          <div className="absolute inset-y-0 left-0 w-72 max-w-[85vw]">
+          <div className="absolute inset-y-0 left-0 w-72 max-w-[85vw] sm:max-w-[22rem]">
             <Sidebar user={user} onClose={() => setMobileOpen(false)} showClose />
           </div>
         </div>
@@ -243,7 +254,7 @@ function Sidebar({
   };
 
   return (
-    <aside className="relative flex h-full w-72 shrink-0 flex-col gap-6 overflow-y-auto border-r border-white/5 bg-black px-5 py-6">
+    <aside className="relative flex h-full w-full min-w-0 flex-col gap-6 overflow-y-auto border-r border-white/5 bg-black px-5 py-6 sm:w-72 sm:shrink-0">
       {showClose && (
         <button
           onClick={onClose}
