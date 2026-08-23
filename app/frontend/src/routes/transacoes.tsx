@@ -383,7 +383,7 @@ function TransactionsPage() {
 
   return (
     <div className="space-y-8">
-      <header className="flex items-end justify-between">
+      <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-4xl">Transações</h1>
           <p className="text-sm text-muted-foreground">Movimentações financeiras registradas.</p>
@@ -495,7 +495,7 @@ function TransactionsPage() {
         >
           Hoje
         </Button>
-        <div className="ml-auto text-sm text-muted-foreground">
+        <div className="text-sm text-muted-foreground sm:ml-auto">
           {transactions.length} {transactions.length === 1 ? "transação" : "transações"}
         </div>
       </div>
@@ -517,9 +517,9 @@ function TransactionsPage() {
             return (
               <div
                 key={t.id}
-                className="flex items-center gap-4 rounded-2xl bg-card/70 p-4 ring-1 ring-white/5"
+                className="flex flex-wrap items-center gap-3 rounded-2xl bg-card/70 p-4 ring-1 ring-white/5 sm:gap-4"
               >
-                <div className="flex-1">
+                <div className="min-w-0 flex-1">
                   <div className="font-display text-lg">
                     {t.description || `Transação #${t.id}`}
                   </div>

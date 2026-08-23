@@ -138,7 +138,7 @@ function CategoriesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl">Gerenciar Categorias</h1>
           <p className="text-sm text-muted-foreground">
@@ -215,7 +215,7 @@ function CategoriesPage() {
         {visible.map((c) => (
           <div
             key={c.id}
-            className="flex items-center justify-between rounded-xl border border-white/10 bg-card p-4"
+            className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 bg-card p-4"
           >
             <div className="min-w-0">
               <div className="flex items-center gap-2">
@@ -230,7 +230,7 @@ function CategoriesPage() {
                 <div className="mt-1 text-sm text-muted-foreground">{c.description}</div>
               )}
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"

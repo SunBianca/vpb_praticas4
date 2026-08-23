@@ -177,7 +177,7 @@ function RootComponent() {
       ) : (
         <div className="min-h-screen bg-triangles">
           {canRenderOutlet ? (
-            <div className="mx-auto max-w-6xl px-8 py-10">
+            <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
               <Outlet />
             </div>
           ) : null}
@@ -222,7 +222,7 @@ function SidebarLayout({ user, children }: { user: LoginResponse; children: Reac
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="absolute inset-0 bg-black/60" onClick={() => setMobileOpen(false)} />
-          <div className="absolute inset-y-0 left-0 w-72 max-w-[85vw] sm:max-w-[22rem]">
+          <div className="absolute inset-y-0 left-0 w-72 max-w-[88vw] sm:max-w-[22rem]">
             <Sidebar user={user} onClose={() => setMobileOpen(false)} showClose />
           </div>
         </div>

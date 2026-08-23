@@ -116,7 +116,7 @@ function AccountsPage() {
 
   return (
     <div className="space-y-8">
-      <header className="flex items-end justify-between">
+      <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-4xl">Contas</h1>
           <p className="text-sm text-muted-foreground">Gerencie suas contas bancárias.</p>
@@ -230,7 +230,7 @@ function AccountsPage() {
         )}
         {accounts.map((a) => (
           <div key={a.id} className="rounded-2xl bg-card/70 p-5 ring-1 ring-white/5">
-            <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <span className="h-3 w-3 rounded-full bg-[#a3ff3d] shadow-[0_0_8px_#a3ff3d]" />
                 <h3 className="font-display text-xl">{a.bank}</h3>
@@ -248,7 +248,7 @@ function AccountsPage() {
               <Info label="Filial" value={a.branch} />
               <Info label="Nº conta" value={a.account_number} />
             </div>
-            <div className="mt-4 flex items-center justify-between">
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
               <div>
                 <div className="text-xs text-muted-foreground">Saldo</div>
                 <div

@@ -395,7 +395,7 @@ function SchedulesPage() {
 
   return (
     <div className="space-y-8">
-      <header className="flex items-end justify-between">
+      <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-4xl">Agendamentos</h1>
           <p className="text-sm text-muted-foreground">Receitas e despesas programadas.</p>
@@ -442,9 +442,9 @@ function SchedulesPage() {
           return (
             <div
               key={s.id}
-              className="flex items-center gap-4 rounded-2xl bg-card/70 p-4 ring-1 ring-white/5"
+              className="flex flex-wrap items-center gap-3 rounded-2xl bg-card/70 p-4 ring-1 ring-white/5 sm:gap-4"
             >
-              <div className="flex-1">
+              <div className="min-w-0 flex-1">
                 <div className="font-display text-lg">
                   {s.description || `Agendamento #${s.id}`}
                 </div>

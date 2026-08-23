@@ -199,7 +199,7 @@ function DashboardPage() {
         </div>
 
         {accounts.length > 0 ? (
-          <div className="w-64">
+          <div className="w-full sm:w-64">
             <label className="mb-1 block text-xs uppercase tracking-wide text-muted-foreground">
               Conta
             </label>
@@ -274,7 +274,7 @@ function DashboardPage() {
           </section>
 
           <section>
-            <div className="mb-4 flex items-end justify-between">
+            <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
               <h2 className="font-display text-2xl">Próximos pagamentos</h2>
               <Link to="/agendamentos" className="text-sm text-accent hover:underline">
                 Ver agendamentos

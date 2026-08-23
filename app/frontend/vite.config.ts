@@ -12,8 +12,11 @@ export default defineConfig({
     plugins: [
       VitePWA({
         registerType: "autoUpdate",
+        devOptions: {
+          enabled: true,
+        },
         outDir: ".output/public",
-        includeAssets: ["pwa-192.svg", "pwa-512.svg"],
+        includeAssets: ["pwa-192.svg", "pwa-512.svg", "offline.html"],
         manifest: {
           name: "VPB Finanças",
           short_name: "VPB Finanças",
@@ -41,6 +44,7 @@ export default defineConfig({
         },
         workbox: {
           navigateFallback: "/",
+          navigateFallbackDenylist: [/^\/api\//],
           globPatterns: ["**/*.{js,css,html,svg,ico,png,woff2}"],
           runtimeCaching: [
             {
@@ -58,6 +62,28 @@ export default defineConfig({
               options: {
                 cacheName: "vpb-api",
                 networkTimeoutSeconds: 3,
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+            {
+              urlPattern: ({ url, request }) =>
+                url.origin === "https://vpb-praticas4.onrender.com" && request.method === "GET",
+              handler: "NetworkFirst",
+              options: {
+                cacheName: "vpb-api",
+                networkTimeoutSeconds: 3,
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+            {
+              urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
+              handler: "CacheFirst",
+              options: {
+                cacheName: "vpb-fonts",
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 * 365,
+                },
                 cacheableResponse: { statuses: [0, 200] },
               },
             },
