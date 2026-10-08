@@ -31,6 +31,10 @@ Serviços utilizados:
 - **Back-end:** [Render](https://render.com/) — hospedagem da API FastAPI (Python)
 - **Banco de Dados:** [NeonDB](https://neon.tech/) — PostgreSQL gerenciado em nuvem
 
+**Observação importante sobre deploy:** o front-end do projeto é publicado pela branch `master` no GitHub, que é a branch que o Vercel builda. Quando houver ajustes em dependências ou em configuração do frontend, é necessário empurrar a correção para `master` para que o deploy reflita a nova versão.
+
+**Atualização de segurança (TanStack):** a vulnerabilidade do pacote `@tanstack/react-start` foi corrigida com a atualização para `^1.168.60`, e o pacote complementar `@tanstack/start-server-core` foi ajustado para `^1.169.39` ou superior, conforme recomendado pela manutenção upstream.
+
 **Observação:** O serviço de back-end utiliza o plano gratuito do Render, que hiberna automaticamente após um período de inatividade. Na primeira requisição após a hibernação, a API pode levar até 1 minuto para responder enquanto o serviço é reiniciado. Requisições subsequentes funcionam normalmente.
 
 ### Ferramentas de IA
