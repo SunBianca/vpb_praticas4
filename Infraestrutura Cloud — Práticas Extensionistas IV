@@ -1,0 +1,563 @@
+## 1. Objetivo
+
+Este documento apresenta a configuração da infraestrutura utilizada para disponibilizar o Sistema de Gestão Financeira Doméstica desenvolvido na disciplina de Práticas Extensionistas IV.
+
+A solução foi estruturada utilizando serviços de computação em nuvem para hospedar separadamente o front-end, a API/back-end e o banco de dados. Essa organização permite que cada parte da aplicação tenha uma responsabilidade específica, facilitando a manutenção, o desenvolvimento e a disponibilização do sistema aos usuários.
+
+A aplicação também possui uma versão responsiva e recursos de Progressive Web App (PWA), permitindo seu acesso por computadores, tablets e dispositivos móveis.
+
+---
+
+## 2. Arquitetura da solução
+
+A infraestrutura da aplicação é composta principalmente por três serviços em nuvem:
+
+- **Vercel:** hospedagem e disponibilização do front-end;
+- **Render:** hospedagem da API/back-end desenvolvida em Python com FastAPI;
+- **NeonDB:** banco de dados PostgreSQL gerenciado em nuvem.
+
+A comunicação entre os componentes ocorre conforme a arquitetura abaixo:
+
+```text
+                         ┌──────────────────────┐
+                         │        Usuário       │
+                         │ PC / Tablet / Celular│
+                         └──────────┬───────────┘
+                                    │
+                                    │ HTTPS
+                                    ▼
+                         ┌──────────────────────┐
+                         │       Vercel         │
+                         │      Front-end       │
+                         │ React + TypeScript   │
+                         │       + PWA          │
+                         └──────────┬───────────┘
+                                    │
+                                    │ Requisições HTTP
+                                    ▼
+                         ┌──────────────────────┐
+                         │       Render         │
+                         │    Back-end / API    │
+                         │       FastAPI        │
+                         │       Python         │
+                         └──────────┬───────────┘
+                                    │
+                                    │ SQL / SQLAlchemy
+                                    ▼
+                         ┌──────────────────────┐
+                         │       NeonDB         │
+                         │      PostgreSQL      │
+                         │ Banco de dados Cloud │
+                         └──────────────────────┘
+```
+
+Dessa forma, o usuário acessa a aplicação através do front-end hospedado na Vercel. O front-end realiza requisições à API hospedada no Render, que processa as operações e realiza a comunicação com o banco de dados PostgreSQL hospedado no NeonDB.
+
+---
+
+# 3. Front-end — Vercel
+
+O front-end da aplicação é desenvolvido utilizando tecnologias do ecossistema React e TypeScript, com Vite/TanStack Start para o processo de desenvolvimento e build.
+
+A aplicação front-end está hospedada na plataforma **Vercel**, responsável por disponibilizar a interface Web aos usuários.
+
+### URL da aplicação
+
+**https://vpb-praticas4.vercel.app/**
+
+A Vercel é responsável pela hospedagem e distribuição da aplicação front-end.
+
+Entre as principais tecnologias utilizadas no front-end estão:
+
+- React;
+- TypeScript;
+- Vite;
+- TanStack Router;
+- Tailwind CSS;
+- React Query;
+- Vite PWA Plugin.
+
+A estrutura do front-end está localizada no repositório em:
+
+```text
+app/frontend/
+```
+
+O projeto possui arquivos de configuração, componentes, páginas, estilos, bibliotecas auxiliares e integração com a API.
+
+---
+
+# 4. Back-end e API — Render
+
+O back-end da aplicação foi desenvolvido em **Python utilizando o framework FastAPI** e está hospedado na plataforma **Render**.
+
+A API é responsável por receber as requisições realizadas pelo front-end, processar as regras da aplicação e realizar as operações necessárias no banco de dados.
+
+### URL da API
+
+```text
+https://vpb-praticas4.onrender.com
+```
+
+A aplicação utiliza o seguinte conjunto principal de tecnologias no back-end:
+
+- Python;
+- FastAPI;
+- SQLAlchemy;
+- Pydantic;
+- PostgreSQL;
+- psycopg2;
+- Uvicorn.
+
+Os códigos do back-end estão localizados em:
+
+```text
+app/backend/
+```
+
+A API está organizada em rotas, serviços, modelos, schemas e configurações de banco de dados.
+
+Entre os recursos disponibilizados pela API estão operações relacionadas a:
+
+- usuários e autenticação;
+- contas financeiras;
+- categorias;
+- transações;
+- compromissos/agendamentos;
+- dashboard;
+- contato.
+
+A aplicação utiliza as operações HTTP necessárias para realizar os recursos de CRUD, incluindo requisições `GET`, `POST`, `PATCH`, `PUT` e `DELETE`, conforme a funcionalidade.
+
+---
+
+# 5. Configuração do deploy do back-end
+
+O projeto possui o arquivo:
+
+```text
+render.yaml
+```
+
+na raiz do repositório.
+
+Esse arquivo permite documentar a configuração do serviço utilizado no Render.
+
+A configuração atual define:
+
+```yaml
+services:
+  - type: web
+    name: vpb-praticas
+    env: python
+    runtime: python-3.11
+    rootDir: app/backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m serve
+    autoDeploy: true
+```
+
+### Principais configurações
+
+**Tipo do serviço:**
+
+```text
+web
+```
+
+O back-end é disponibilizado como um serviço Web.
+
+**Ambiente:**
+
+```text
+Python
+```
+
+**Versão do Python:**
+
+```text
+Python 3.11
+```
+
+**Diretório do projeto:**
+
+```text
+app/backend
+```
+
+**Comando de instalação das dependências:**
+
+```text
+pip install -r requirements.txt
+```
+
+**Comando de inicialização:**
+
+```text
+python -m serve
+```
+
+**Deploy automático:**
+
+```text
+autoDeploy: true
+```
+
+Com essa configuração, o Render utiliza o código publicado no repositório Git para realizar o processo de build e disponibilizar o back-end.
+
+---
+
+# 6. Inicialização do servidor
+
+O arquivo:
+
+```text
+app/backend/serve.py
+```
+
+é utilizado para iniciar o servidor da aplicação.
+
+A aplicação utiliza o **Uvicorn** como servidor ASGI para executar a aplicação FastAPI.
+
+A porta utilizada é obtida através da variável de ambiente `PORT`, utilizando a porta `8000` como valor padrão quando essa variável não está definida.
+
+O servidor é executado utilizando:
+
+```text
+host = 0.0.0.0
+```
+
+permitindo que a aplicação seja acessada pelo ambiente de hospedagem.
+
+---
+
+# 7. Banco de dados — NeonDB / PostgreSQL
+
+O banco de dados utilizado pela aplicação é o **PostgreSQL**, hospedado através do serviço gerenciado em nuvem **NeonDB**.
+
+O PostgreSQL é responsável pelo armazenamento persistente das informações utilizadas pelo sistema.
+
+A comunicação entre o back-end e o banco de dados é realizada utilizando:
+
+- SQLAlchemy;
+- psycopg2;
+- PostgreSQL.
+
+A configuração de conexão está localizada em:
+
+```text
+app/backend/core/database.py
+```
+
+A aplicação utiliza variáveis de ambiente para obter as informações necessárias para conexão com o banco.
+
+A principal variável utilizada é:
+
+```text
+DATABASE_URL
+```
+
+Também existe suporte para configuração através das variáveis:
+
+```text
+PGHOST
+PGDATABASE
+PGUSER
+PGPASSWORD
+PGSSLMODE
+PGCHANNELBINDING
+```
+
+Dessa forma, as informações de acesso ao banco não precisam ser armazenadas diretamente no código-fonte.
+
+---
+
+# 8. Segurança das credenciais
+
+As informações sensíveis utilizadas pela aplicação devem ser configuradas através de variáveis de ambiente.
+
+Entre os exemplos estão:
+
+```text
+DATABASE_URL
+PGPASSWORD
+PGUSER
+PGHOST
+PGDATABASE
+```
+
+Os valores reais dessas variáveis não são publicados neste documento nem devem ser armazenados diretamente no repositório público.
+
+No ambiente de produção, essas informações devem ser configuradas diretamente nas ferramentas de hospedagem utilizadas pela aplicação.
+
+O arquivo `.env` é utilizado para configurações locais quando necessário e não deve conter informações que sejam publicadas no Git.
+
+---
+
+# 9. Integração entre Front-end e API
+
+O front-end realiza a comunicação com a API através do arquivo:
+
+```text
+app/frontend/src/lib/api.ts
+```
+
+Nesse arquivo está definida a URL base da API:
+
+```text
+https://vpb-praticas4.onrender.com
+```
+
+As requisições são realizadas através da função `apiFetch`, que utiliza a API Fetch do navegador.
+
+O fluxo de comunicação ocorre da seguinte maneira:
+
+```text
+Usuário
+   │
+   ▼
+Interface React
+   │
+   ▼
+apiFetch()
+   │
+   │ HTTP/HTTPS
+   ▼
+FastAPI no Render
+   │
+   ▼
+Serviços da aplicação
+   │
+   ▼
+SQLAlchemy
+   │
+   ▼
+PostgreSQL / NeonDB
+```
+
+Esse modelo permite separar a interface do usuário das regras de negócio e da persistência dos dados.
+
+---
+
+# 10. Progressive Web App (PWA)
+
+A aplicação possui recursos de **Progressive Web App (PWA)** utilizando o pacote:
+
+```text
+vite-plugin-pwa
+```
+
+A configuração está localizada em:
+
+```text
+app/frontend/vite.config.ts
+```
+
+A aplicação possui um Web App Manifest configurado com:
+
+```text
+name: VPB Finanças
+short_name: VPB Finanças
+lang: pt-BR
+start_url: /
+scope: /
+display: standalone
+```
+
+O modo:
+
+```text
+display: standalone
+```
+
+permite que a aplicação seja executada com aparência semelhante à de um aplicativo instalado no dispositivo.
+
+Também foram configurados ícones para a aplicação:
+
+```text
+public/pwa-192.svg
+public/pwa-512.svg
+```
+
+---
+
+# 11. Service Worker e cache
+
+A configuração do PWA utiliza um **Service Worker** para realizar o gerenciamento de recursos armazenados em cache.
+
+O projeto utiliza o Workbox através do `vite-plugin-pwa`.
+
+Entre os recursos configurados estão:
+
+- cache de arquivos estáticos;
+- cache de documentos;
+- cache de algumas requisições `GET` da API;
+- cache de fontes;
+- estratégia `NetworkFirst` para documentos e dados que podem ser recuperados da rede;
+- página de fallback para navegação.
+
+A aplicação também possui:
+
+```text
+public/offline.html
+```
+
+para auxiliar no tratamento de situações de indisponibilidade de rede.
+
+É importante destacar que o recurso offline não significa que todas as funcionalidades do sistema funcionem completamente sem conexão. O comportamento offline depende dos recursos que já tenham sido armazenados no cache e das estratégias configuradas no Service Worker.
+
+---
+
+# 12. Responsividade
+
+Além dos recursos de PWA, a aplicação possui uma interface responsiva para diferentes tamanhos de tela.
+
+A interface foi desenvolvida considerando:
+
+- computadores;
+- tablets;
+- smartphones.
+
+O front-end utiliza breakpoints responsivos e componentes adaptados para diferentes tamanhos de viewport.
+
+Também existem componentes e hooks específicos para identificar condições de uso em dispositivos menores.
+
+Um exemplo é o arquivo:
+
+```text
+app/frontend/src/hooks/use-mobile.tsx
+```
+
+que auxilia na identificação de dispositivos/telas com largura reduzida.
+
+A estrutura principal da aplicação também possui diferentes comportamentos de navegação para telas maiores e menores, permitindo adaptar menus e componentes ao espaço disponível.
+
+---
+
+# 13. Estrutura geral do projeto
+
+A organização principal da solução é:
+
+```text
+vpb_praticas4/
+│
+├── app/
+│   │
+│   ├── backend/
+│   │   ├── core/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   ├── main.py
+│   │   ├── serve.py
+│   │   └── requirements.txt
+│   │
+│   └── frontend/
+│       ├── public/
+│       ├── src/
+│       ├── package.json
+│       ├── vite.config.ts
+│       └── ...
+│
+├── docs/
+│   ├── REQUISITOS.md
+│   ├── INFRAESTRUTURA.md
+│   └── ...
+│
+├── render.yaml
+├── README.md
+└── .gitignore
+```
+
+Essa organização separa os principais componentes da solução, facilitando a manutenção e a compreensão da arquitetura.
+
+---
+
+# 14. Disponibilidade da aplicação
+
+A aplicação é disponibilizada através da infraestrutura em nuvem, permitindo acesso remoto sem a necessidade de executar o projeto localmente.
+
+A aplicação utiliza:
+
+| Componente | Tecnologia | Serviço |
+|---|---|---|
+| Front-end | React / TypeScript | Vercel |
+| PWA | Vite PWA / Service Worker | Vercel |
+| API | Python / FastAPI | Render |
+| Servidor | Uvicorn | Render |
+| ORM | SQLAlchemy | Render |
+| Banco de dados | PostgreSQL | NeonDB |
+| Código-fonte | Git | GitHub |
+
+---
+
+# 15. Observação sobre o plano do Render
+
+O back-end utiliza o plano gratuito do Render.
+
+Nesse tipo de hospedagem, o serviço pode entrar em estado de inatividade após determinado período sem utilização. Quando uma nova requisição é realizada após esse período, pode ocorrer um tempo adicional de inicialização enquanto o serviço é reativado.
+
+Após a inicialização do serviço, as requisições subsequentes tendem a responder normalmente.
+
+Essa característica é uma limitação relacionada ao plano de hospedagem utilizado e não à implementação da API.
+
+---
+
+# 16. Integração com o Git
+
+O código-fonte da aplicação está publicado no GitHub:
+
+**https://github.com/SunBianca/vpb_praticas4**
+
+O repositório contém os códigos necessários para:
+
+- aplicação front-end;
+- aplicação back-end;
+- API;
+- configuração do PWA;
+- configuração do deploy do back-end;
+- documentação;
+- diagramas e demais materiais do projeto.
+
+O arquivo `render.yaml` também está versionado no repositório para documentar a configuração do serviço no Render.
+
+---
+
+# 17. Fluxo de publicação
+
+O processo de publicação da solução pode ser representado da seguinte maneira:
+
+```text
+                  GitHub
+                    │
+          ┌─────────┴─────────┐
+          │                   │
+          ▼                   ▼
+       Vercel              Render
+          │                   │
+          │                   │
+          ▼                   ▼
+     Front-end              API
+      React/PWA            FastAPI
+                              │
+                              ▼
+                           NeonDB
+                         PostgreSQL
+```
+
+O GitHub funciona como repositório central do código-fonte.
+
+A Vercel é responsável pela disponibilização do front-end, enquanto o Render disponibiliza o back-end e a API. A API, por sua vez, acessa o banco de dados PostgreSQL hospedado no NeonDB.
+
+---
+
+# 18. Conclusão
+
+A infraestrutura da aplicação foi construída utilizando serviços de computação em nuvem, separando as responsabilidades entre interface, processamento e armazenamento de dados.
+
+O front-end é disponibilizado pela Vercel, enquanto a API desenvolvida com FastAPI é executada no Render. Os dados persistentes são armazenados em um banco PostgreSQL gerenciado pelo NeonDB.
+
+Além da hospedagem em nuvem, a aplicação possui recursos de responsividade e Progressive Web App, permitindo sua utilização em diferentes dispositivos e possibilitando a instalação da aplicação em dispositivos compatíveis.
+
+A configuração da infraestrutura e os códigos da solução encontram-se versionados no repositório GitHub da Prática Extensionista IV, garantindo que a implementação e sua documentação estejam disponíveis juntamente com o projeto.
